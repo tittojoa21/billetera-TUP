@@ -1,0 +1,232 @@
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #181818;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    animation: fadeInBody 1.5s ease-out;
+}
+
+/* Animations */
+@keyframes fadeInBody {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Container */
+.container {
+    margin-top: 100px;
+    max-width: 800px;
+    padding: 20px;
+    animation: slideUp 1.2s ease-in-out;
+}
+
+/* Header Styling */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #333;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    animation: bounceIn 1s ease;
+}
+
+header .navbar-brand {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 1.6rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+header .navbar-brand:hover {
+    color: #66bb6a;
+}
+
+/* Headings */
+h1, h3, h4 {
+    color: #e0e0e0;
+    font-weight: 700;
+    margin-bottom: 15px;
+    animation: fadeInBody 1.5s ease-out;
+}
+
+/* Balance Display */
+.balance-box {
+    background-color: #242424;
+    color: #4caf50;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    animation: bounceIn 1.2s ease;
+}
+
+.balance-box:hover {
+    transform: scale(1.03);
+}
+
+.balance-box h3 {
+    font-size: 2.2em;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Form Controls */
+.form-control {
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    background: #2b2b2b;
+    color: #e0e0e0;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: slideUp 1.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Variants */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+}
+
+.btn-success {
+    background-color: #4caf50;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #388e3c;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border: none;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeOut 5s forwards, slideUp 1.2s ease-in-out;
+    transition: opacity 0.5s ease;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.alert-success {
+    background-color: #4caf50;
+}
+
+.alert-danger {
+    background-color: #f44336;
+}
+
+/* Links */
+a {
+    color: #4caf50;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #66bb6a;
+    text-decoration: underline;
+}
+
+/* Responsive Styling */
+@media (max-width: 576px) {
+    .container {
+        margin-top: 90px;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}

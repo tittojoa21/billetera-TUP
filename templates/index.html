@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billetera TUP - Iniciar Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Fondo degradado animado */
+        body {
+            background: linear-gradient(135deg, #2d3436, #00b894);
+            background-size: 300% 300%;
+            animation: gradientBackground 8s ease infinite;
+            color: #444;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        @keyframes gradientBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 400px;
+            padding: 0;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background-color: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.5s ease;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        .container:hover {
+            transform: scale(1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilo de la tarjeta */
+        .card {
+            border-radius: 20px;
+            padding: 30px;
+            background-color: #ffffff;
+        }
+
+        .card h1 {
+            color: #00b894;
+            font-weight: bold;
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Campos de formulario */
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #00b894;
+            box-shadow: 0 0 10px rgba(0, 184, 148, 0.5);
+        }
+
+        /* Botón de enviar */
+        .btn-primary {
+            background-color: #00b894;
+            border: none;
+            font-weight: bold;
+            padding: 12px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #01966c;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mensajes de alerta */
+        .alert {
+            font-size: 0.9rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Enlace de registro */
+        .register-link {
+            color: #00b894;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .register-link:hover {
+            color: #01966c;
+            text-decoration: underline;
+        }
+
+        /* Icono de toggle de contraseña */
+        .password-toggle {
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            font-size: 1.2em;
+            color: #00b894;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            font-weight: bold;
+            outline: none;
+        }
+
+        .password-toggle:hover {
+            color: #01966c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card shadow">
+            <h1>Iniciar Sesión en Billetera TUP</h1>
+
+            <!-- Mensajes de alerta -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- Formulario de inicio de sesión -->
+            <form action="{{ url_for('login') }}" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Ingresa tu usuario" required>
+                </div>
+
+                <div class="mb-3 position-relative">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required aria-describedby="passwordHelp">
+                    <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">👁️</button>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                </div>
+            </form>
+
+            <p class="text-center mt-3">
+                ¿No tienes una cuenta? <a href="{{ url_for('register') }}" class="register-link">Regístrate aquí</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts para funcionalidades adicionales -->
+    <script>
+        /**
+         * Alterna la visibilidad de la contraseña
+         */
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            const toggleIcon = document.querySelector(".password-toggle");
+            const isPassword = passwordField.type === "password";
+            passwordField.type = isPassword ? "text" : "password";
+            toggleIcon.textContent = isPassword ? "🙈" : "👁️";
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
