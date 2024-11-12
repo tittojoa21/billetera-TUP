@@ -25,11 +25,7 @@ function fadeOut(element, duration = 500) {
     element.style.transition = `opacity ${duration}ms ease, transform ${duration}ms ease`;
     element.style.opacity = '0';
     element.style.transform = 'translateY(-10px)';
-    setTimeout(() => {
-        if (element && element.parentNode) {
-            element.parentNode.removeChild(element);
-        }
-    }, duration);
+    setTimeout(() => element?.remove(), duration);
 }
 
 /**
@@ -48,10 +44,8 @@ function setupTransactionConfirmation() {
 function handleTransactionSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    const amountInput = form.querySelector('input[name="amount"]');
-    const typeSelect = form.querySelector('select[name="type"]');
-    const amount = parseFloat(amountInput?.value);
-    const type = typeSelect?.value;
+    const amount = parseFloat(form.amount?.value);
+    const type = form.type?.value;
 
     if (!validateAmount(amount)) {
         showAlert("Por favor, ingresa un monto válido y positivo.", "danger");
@@ -69,9 +63,7 @@ function handleTransactionSubmit(event) {
  * @param {Function} onConfirm - Función a ejecutar si el usuario confirma.
  */
 function showConfirmation(message, onConfirm) {
-    if (confirm(message)) {
-        onConfirm();
-    }
+    if (confirm(message)) onConfirm();
 }
 
 /**
@@ -95,9 +87,8 @@ function setupCardInput(inputSelector, displaySelector) {
     const cardDisplay = document.querySelector(displaySelector);
 
     if (cardInput && cardDisplay) {
-        cardInput.addEventListener('input', event => {
-            const formattedCardNumber = formatCardNumber(event.target.value);
-            cardDisplay.textContent = formattedCardNumber.length ? formattedCardNumber : '#### #### #### ####';
+        cardInput.addEventListener('input', () => {
+            cardDisplay.textContent = formatCardNumber(cardInput.value) || '#### #### #### ####';
         });
     }
 }
@@ -127,6 +118,20 @@ function validateAmount(amount) {
  * @param {number} duration - Tiempo en milisegundos antes de ocultar automáticamente la alerta.
  */
 function showAlert(message, type = "danger", duration = 4000) {
+    const alertBox = createAlert(message, type);
+    const alertContainer = document.querySelector('main') || document.body;
+
+    alertContainer.prepend(alertBox);
+    setTimeout(() => fadeOut(alertBox), duration);
+}
+
+/**
+ * Crea un elemento de alerta basado en el mensaje y el tipo.
+ * @param {string} message - Mensaje a mostrar en la alerta.
+ * @param {string} type - Tipo de la alerta (ej. "success", "danger").
+ * @returns {Element} - Elemento de alerta HTML.
+ */
+function createAlert(message, type) {
     const alertBox = document.createElement('div');
     alertBox.className = `alert alert-${type} alert-dismissible fade show`;
     alertBox.role = "alert";
@@ -134,10 +139,5 @@ function showAlert(message, type = "danger", duration = 4000) {
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
-
-    // Añadir la alerta al contenedor principal si existe, o al body
-    document.querySelector('main')?.prepend(alertBox) || document.body.prepend(alertBox);
-
-    // Desvanece y elimina la alerta después del tiempo especificado
-    setTimeout(() => fadeOut(alertBox), duration);
+    return alertBox;
 }

@@ -20,17 +20,16 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
         @keyframes gradientAnimation {
             0% {
                 background-position: 0% 50%;
             }
-
             50% {
                 background-position: 100% 50%;
             }
-
             100% {
                 background-position: 0% 50%;
             }
@@ -41,7 +40,6 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -89,6 +87,7 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
             border-radius: 10px;
             margin-top: 20px;
+            position: relative;
         }
 
         .btn-primary:hover {
@@ -178,6 +177,14 @@
 
         .password-toggle:hover {
             color: #17a673;
+        }
+
+        /* Mejora para la responsividad */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 20px;
+            }
         }
     </style>
 </head>

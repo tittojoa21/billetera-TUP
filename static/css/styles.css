@@ -3,35 +3,32 @@ body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     background-size: 300% 300%;
-    animation: gradientBackground 12s ease infinite;
+    animation: gradientBackground 12s ease infinite, fadeInBody 1.5s ease-out;
     color: #e0e0e0;
     margin: 0;
-    padding: 0;
     line-height: 1.6;
-    animation: fadeInBody 1.5s ease-out;
 }
 
 /* Animations */
 @keyframes gradientBackground {
-    0% { background-position: 0% 50%; }
+    0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 
 @keyframes fadeInBody {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes bounceIn {
-    0% { transform: scale(0.9); opacity: 0; }
+    from { transform: scale(0.9); opacity: 0; }
     60% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 @keyframes slideUp {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 /* Container */
@@ -61,7 +58,6 @@ header .navbar-brand {
     color: #4caf50;
     font-weight: bold;
     font-size: 1.8rem;
-    text-decoration: none;
     transition: color 0.3s ease;
 }
 
@@ -93,12 +89,6 @@ h1, h3, h4 {
 .balance-box:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
-.balance-box h3 {
-    font-size: 2.5em;
-    font-weight: 600;
-    margin: 0;
 }
 
 /* Form Controls */
@@ -140,7 +130,6 @@ h1, h3, h4 {
     padding: 12px 30px;
     font-weight: bold;
     font-size: 1rem;
-    text-align: center;
     cursor: pointer;
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
@@ -155,7 +144,6 @@ h1, h3, h4 {
 /* Button Variants */
 .btn-primary {
     background-color: #007bff;
-    border: none;
 }
 
 .btn-primary:hover {
@@ -164,7 +152,6 @@ h1, h3, h4 {
 
 .btn-success {
     background-color: #28a745;
-    border: none;
 }
 
 .btn-success:hover {
@@ -173,7 +160,6 @@ h1, h3, h4 {
 
 .btn-info {
     background-color: #17a2b8;
-    border: none;
 }
 
 .btn-info:hover {
@@ -182,7 +168,6 @@ h1, h3, h4 {
 
 .btn-danger {
     background-color: #dc3545;
-    border: none;
 }
 
 .btn-danger:hover {
@@ -201,8 +186,7 @@ h1, h3, h4 {
 }
 
 @keyframes fadeOut {
-    0% { opacity: 1; }
-    90% { opacity: 1; }
+    0%, 90% { opacity: 1; }
     100% { opacity: 0; }
 }
 
@@ -217,7 +201,6 @@ h1, h3, h4 {
 /* Links */
 a {
     color: #4caf50;
-    text-decoration: none;
     transition: color 0.2s ease;
 }
 
@@ -227,7 +210,7 @@ a:hover {
 }
 
 /* Responsive Styling */
-@media (max-width: 576px) {
+@media (max-width: 768px) {
     .container {
         margin-top: 90px;
         padding: 20px;

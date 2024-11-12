@@ -7,13 +7,23 @@
     <title>Dashboard - Billetera TUP</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Fondo y fuentes */
+        :root {
+            --primary-color: #4b6584;
+            --secondary-color: #2c3e50;
+            --highlight-color: #20bf6b;
+            --accent-color: #0fb9b1;
+            --light-color: #ecf0f1;
+            --dark-color: #1b2631;
+        }
+
         body {
-            background: linear-gradient(135deg, #2c3e50, #4b6584);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             background-size: 200% 200%;
             animation: gradientAnimation 12s ease infinite;
-            color: #ecf0f1;
+            color: var(--light-color);
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
@@ -21,17 +31,20 @@
         }
 
         @keyframes gradientAnimation {
-            0% {
+            0%,
+            100% {
                 background-position: 0% 50%;
             }
 
             50% {
                 background-position: 100% 50%;
             }
+        }
 
-            100% {
-                background-position: 0% 50%;
-            }
+        .container {
+            max-width: 1100px;
+            padding-top: 60px;
+            animation: fadeIn 1.5s ease;
         }
 
         @keyframes fadeIn {
@@ -44,51 +57,14 @@
             }
         }
 
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-
-            60% {
-                transform: scale(1.05);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .container {
-            max-width: 1100px;
-            padding-top: 60px;
-            animation: fadeIn 1.5s ease;
-        }
-
-        /* Navbar */
         .navbar {
-            background-color: #1b2631;
+            background-color: var(--dark-color);
             padding: 15px 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            animation: bounceIn 1.5s ease;
         }
 
         .navbar-brand {
-            color: #ecf0f1;
+            color: var(--light-color);
             font-weight: bold;
             font-size: 1.8rem;
             text-decoration: none;
@@ -99,47 +75,92 @@
             color: #bdc3c7;
         }
 
-        /* Balance */
         .balance-display {
-            background: linear-gradient(135deg, #20bf6b, #0fb9b1);
+            background: linear-gradient(135deg, var(--highlight-color), var(--accent-color));
             color: #fff;
             padding: 25px;
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            animation: slideInUp 1.5s ease;
-            border: 1px solid #1abc9c;
+            animation: fadeIn 1.5s ease;
+            border: 1px solid var(--highlight-color);
         }
 
-        /* Tarjetas personalizadas */
         .card-custom {
-            background-color: #1f2e3b;
-            color: #ecf0f1;
+            background-color: var(--dark-color);
+            color: var(--light-color);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
             animation: fadeIn 1.5s ease;
-            border: 1px solid #3b4b5e;
+            border: 1px solid var(--primary-color);
         }
 
         .card-custom:hover {
             transform: scale(1.05);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            border: 1px solid #1abc9c;
+            border: 1px solid var(--highlight-color);
         }
 
-        /* Cotización del dólar */
+        .card-animation {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .card-animation-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, var(--highlight-color), var(--accent-color));
+            color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-direction: column;
+        }
+
+        .card-back {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
         .rate-box {
             width: 45%;
             padding: 15px;
             border-radius: 10px;
-            background-color: #ecf0f1;
+            background-color: var(--light-color);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            animation: bounceIn 1.5s ease;
+            animation: fadeIn 1.5s ease;
         }
 
         .rate-box:hover {
@@ -152,7 +173,6 @@
             margin-bottom: 5px;
         }
 
-        /* Botones */
         .btn-custom {
             border-radius: 30px;
             padding: 10px 20px;
@@ -160,37 +180,34 @@
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             animation: fadeIn 1.5s ease;
-            background-color: #0fb9b1;
+            background-color: var(--accent-color);
             border: none;
         }
 
         .btn-custom:hover {
             opacity: 0.9;
             transform: scale(1.08);
-            background-color: #20bf6b;
+            background-color: var(--highlight-color);
             color: #fff;
         }
 
-        /* Historial de transacciones */
         .transaction-history {
             max-height: 250px;
             overflow-y: auto;
-            background-color: #ecf0f1;
+            background-color: var(--light-color);
             color: #333;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
-            animation: slideInUp 1.5s ease;
+            animation: fadeIn 1.5s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Tablas del historial */
         .table thead {
-            background-color: #1abc9c;
+            background-color: var(--highlight-color);
             color: #fff;
         }
 
-        /* Alertas */
         .alert {
             font-size: 1rem;
             border-radius: 10px;
@@ -199,27 +216,31 @@
             margin-top: 15px;
             animation: fadeIn 1.5s ease;
         }
+
+        .chart-container {
+            margin-top: 30px;
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="#">Billetera TUP</a>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-4">
         <h1 class="text-center mb-4">Bienvenido {{ current_user.username }}</h1>
 
-        <!-- Balance -->
         <div class="balance-display mb-4">
             <h4>Balance Actual</h4>
-            <h2>${{ "%.2f" | format(balance_pesos) }} Pesos</h2>
-            <h2>${{ "%.2f" | format(balance_dollars) }} Dólares</h2>
+            <h2>${{ balance_pesos | default("0.00") }} Pesos</h2>
+            <h2>${{ balance_dollars | default("0.00") }} Dólares</h2>
         </div>
 
-        <!-- Mensajes de alerta -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div class="mt-3">
@@ -233,9 +254,7 @@
         {% endif %}
         {% endwith %}
 
-        <!-- Sección principal de tarjetas -->
         <div class="row mt-4">
-            <!-- Cotización del Dólar -->
             <div class="col-md-4">
                 <div class="card-custom text-center">
                     <h4 class="mb-3">Cotización del Dólar</h4>
@@ -243,29 +262,43 @@
                     <div class="d-flex justify-content-around align-items-center py-3">
                         <div class="rate-box">
                             <i class="bi bi-currency-dollar text-success"></i>
-                            <p class="m-0"><strong>Compra:</strong></p>
-                            <p class="text-success">${{ "%.2f" | format(buy_rate) }}</p>
+                            <p class="m-0 text-dark"><strong>Compra:</strong></p>
+                            <p class="text-success">${{ "%.2f" % buy_rate }}</p>
                         </div>
                         <div class="rate-box">
                             <i class="bi bi-currency-exchange text-danger"></i>
-                            <p class="m-0"><strong>Venta:</strong></p>
-                            <p class="text-danger">${{ "%.2f" | format(sell_rate) }}</p>
+                            <p class="m-0 text-dark"><strong>Venta:</strong></p>
+                            <p class="text-danger">${{ "%.2f" % sell_rate }}</p>
                         </div>
                     </div>
                     {% else %}
-                    <p>No hay datos de cotización disponibles</p>
+                    <p class="text-muted">No hay datos de cotización disponibles</p>
                     {% endif %}
+                </div>
+                <div class="chart-container">
+                    <canvas id="balanceChart"></canvas>
                 </div>
             </div>
 
-            <!-- Agregar Tarjeta -->
             <div class="col-md-4">
+                <div class="card-animation">
+                    <div class="card-animation-inner" id="card-animation-inner">
+                        <div class="card-front" id="card-front">
+                            <p id="card-number-display">**** **** **** ****</p>
+                            <p id="expiration-display">MM/AA</p>
+                        </div>
+                        <div class="card-back">
+                            <h4 class="mb-3">CVV</h4>
+                            <p id="cvv-display">***</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-custom">
                     <h4 class="mb-3">Agregar Tarjeta</h4>
                     <form action="{{ url_for('add_card') }}" method="POST">
                         <div class="mb-3">
                             <label for="card_number" class="form-label">Número de Tarjeta</label>
-                            <input type="text" id="card_number" name="card_number" class="form-control" maxlength="16" placeholder="1234 5678 9012 3456" required>
+                            <input type="text" id="card_number" name="card_number" class="form-control" pattern="\d{4}\s\d{4}\s\d{4}\s\d{4}" maxlength="19" placeholder="1234 5678 9012 3456" required aria-label="Número de tarjeta">
                         </div>
                         <div class="mb-3">
                             <label for="expiration" class="form-label">Fecha de Vencimiento</label>
@@ -273,27 +306,28 @@
                         </div>
                         <div class="mb-3">
                             <label for="cvv" class="form-label">CVV</label>
-                            <input type="text" id="cvv" name="cvv" class="form-control" maxlength="3" placeholder="123" required>
+                            <input type="text" id="cvv" name="cvv" class="form-control" pattern="\d{3}" maxlength="3" placeholder="123" required>
                         </div>
-                        <button type="submit" class="btn btn-secondary w-100 btn-custom">Guardar Tarjeta</button>
+                        <button type="submit" class="btn btn-secondary w-100 btn-custom" aria-label="Guardar tarjeta">Guardar Tarjeta</button>
                     </form>
                 </div>
             </div>
 
-            <!-- Opciones -->
             <div class="col-md-4">
                 <div class="card-custom">
                     <h4 class="mb-3">Opciones</h4>
                     <div class="d-grid gap-2">
                         <a href="{{ url_for('transactions') }}" class="btn btn-info btn-custom">Transacciones</a>
-                        <a href="{{ url_for('transfer_history') }}" class="btn btn-warning btn-custom">Historial de Transacciones</a>
+                        <a href="{{ url_for('transfer_history') }}" class="btn btn-warning btn-custom">Historial de Transferencias</a>
                         <a href="{{ url_for('logout') }}" class="btn btn-danger btn-custom">Cerrar Sesión</a>
                     </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="operationsChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Historial de transacciones -->
         <div class="card-custom mt-4">
             <h4>Historial de Transacciones Recientes</h4>
             <div class="transaction-history">
@@ -309,8 +343,18 @@
                     <tbody>
                         {% for transaction in transactions %}
                         <tr>
-                            <td>{{ transaction.destination or "N/A" }}</td>
-                            <td>${{ "%.2f" | format(transaction.amount) }}</td>
+                            <td>
+                                {% if transaction.destination %}
+                                    {% if transaction.destination == current_user.username %}
+                                        YO
+                                    {% else %}
+                                        {{ transaction.destination }}
+                                    {% endif %}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>${{ "%.2f" % transaction.amount }}</td>
                             <td>{{ transaction.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}</td>
                         </tr>
                         {% endfor %}
@@ -321,20 +365,89 @@
                 {% endif %}
             </div>
         </div>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Oculta automáticamente las alertas después de un tiempo
-        document.querySelectorAll('.alert').forEach(alert => {
-            setTimeout(() => {
-                alert.classList.add('fade');
-                setTimeout(() => {
-                    alert.remove();
-                }, 500); // Tiempo para que el alert se elimine después de desvanecerse
-            }, 3000);
+document.addEventListener('DOMContentLoaded', function () {
+    // Configuración para la animación y formateo de la tarjeta
+    const cardNumberInput = document.getElementById('card_number');
+    const expirationInput = document.getElementById('expiration');
+    const cvvInput = document.getElementById('cvv');
+    const cardNumberDisplay = document.getElementById('card-number-display');
+    const expirationDisplay = document.getElementById('expiration-display');
+    const cvvDisplay = document.getElementById('cvv-display');
+    const cardAnimationInner = document.getElementById('card-animation-inner');
+
+    cardNumberInput.addEventListener('input', () => {
+        let formattedNumber = cardNumberInput.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+        cardNumberDisplay.textContent = formattedNumber || '**** **** **** ****';
+    });
+
+    expirationInput.addEventListener('input', () => {
+        expirationDisplay.textContent = expirationInput.value || 'MM/AA';
+    });
+
+    cvvInput.addEventListener('focus', () => {
+        cardAnimationInner.style.transform = 'rotateY(180deg)';
+    });
+
+    cvvInput.addEventListener('blur', () => {
+        cardAnimationInner.style.transform = 'rotateY(0deg)';
+    });
+
+    cvvInput.addEventListener('input', () => {
+        cvvDisplay.textContent = cvvInput.value || '***';
+    });
+
+    // Configuración de gráficos con Chart.js
+    const balancePesos = parseFloat("{{ balance_pesos | default(0) }}") || 0;
+    const balanceDollars = parseFloat("{{ balance_dollars | default(0) }}") || 0;
+    const totalDeposits = parseFloat("{{ total_deposits | default(0) }}") || 0;
+    const totalWithdrawals = parseFloat("{{ total_withdrawals | default(0) }}") || 0;
+    const totalTransfers = parseFloat("{{ total_transfers | default(0) }}") || 0;
+    const totalBuyDollars = parseFloat("{{ total_buy_dollars | default(0) }}") || 0;
+    const totalSellDollars = parseFloat("{{ total_sell_dollars | default(0) }}") || 0;
+
+    // Configuración del gráfico de balance
+    const balanceData = {
+        labels: ['Pesos', 'Dólares'],
+        datasets: [{
+            data: [balancePesos, balanceDollars],
+            backgroundColor: ['#20bf6b', '#0fb9b1'],
+        }]
+    };
+
+    if (document.getElementById('balanceChart')) {
+        new Chart(document.getElementById('balanceChart'), {
+            type: 'pie',
+            data: balanceData,
+            options: { responsive: true, maintainAspectRatio: false }
         });
+    }
+
+    // Configuración del gráfico de operaciones realizadas
+    const operationsData = {
+        labels: ['Depósitos', 'Retiros', 'Transferencias', 'Compra Dólares', 'Venta Dólares'],
+        datasets: [{
+            data: [totalDeposits, totalWithdrawals, totalTransfers, totalBuyDollars, totalSellDollars],
+            backgroundColor: ['#4b6584', '#20bf6b', '#0fb9b1', '#f7b731', '#eb3b5a'],
+        }]
+    };
+
+    if (document.getElementById('operationsChart')) {
+        new Chart(document.getElementById('operationsChart'), {
+            type: 'pie',
+            data: operationsData,
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+});
+
     </script>
+
 </body>
 
 </html>
+

@@ -100,8 +100,16 @@ def logout():
 @login_required
 def dashboard():
     rates = get_latest_dollar_rate()
-    transactions = Transaction.query.filter_by(user_id=current_user.id).order_by(Transaction.timestamp.desc()).limit(5).all()
+    transactions = Transaction.query.filter_by(user_id=current_user.id).all()
     
+    # Calcular totales por tipo de transacción
+    total_deposits = sum(t.amount for t in transactions if t.type == 'deposit')
+    total_withdrawals = sum(t.amount for t in transactions if t.type == 'withdraw')
+    total_transfers = sum(t.amount for t in transactions if t.type == 'transfer')
+    total_buy_dollars = sum(t.amount for t in transactions if t.type == 'buy_dollars')
+    total_sell_dollars = sum(t.amount for t in transactions if t.type == 'sell_dollars')
+    
+    # Pasar totales al template
     return render_template(
         'dashboard.html',
         balance_pesos=current_user.balance_pesos,
@@ -110,7 +118,12 @@ def dashboard():
         sell_rate=rates['sell_rate'],
         blue_buy_rate=rates['blue_buy_rate'],
         blue_sell_rate=rates['blue_sell_rate'],
-        transactions=transactions
+        transactions=transactions,
+        total_deposits=total_deposits,
+        total_withdrawals=total_withdrawals,
+        total_transfers=total_transfers,
+        total_buy_dollars=total_buy_dollars,
+        total_sell_dollars=total_sell_dollars
     )
 
 @app.route('/add-card', methods=['POST'])
@@ -137,6 +150,7 @@ def transaction():
     
     destination_username = request.form.get('destination')
     rates = get_latest_dollar_rate()
+    transaction = None  # Asegurar que `transaction` esté definida
 
     if not rates['buy_rate'] or not rates['sell_rate']:
         flash('Las tasas de cambio no están disponibles actualmente.', 'danger')
@@ -166,10 +180,12 @@ def transaction():
                 flash('Fondos insuficientes para esta operación.', 'danger')
                 return redirect(url_for('dashboard'))
             
+            # Ajuste en el monto de transferencia
             current_user.balance_pesos -= amount
             recipient.balance_pesos += amount
 
-            transaction_sender = Transaction(user_id=current_user.id, amount=amount, type=type, destination=destination_username)
+            # Registro de transacciones para el remitente y el destinatario
+            transaction_sender = Transaction(user_id=current_user.id, amount=amount, type=type, destination=recipient.username)
             transaction_recipient = Transaction(user_id=recipient.id, sender_id=current_user.id, amount=amount, type=type)
             
             db.session.add(transaction_sender)
@@ -219,7 +235,8 @@ def transaction():
             flash('Tipo de transacción no válida.', 'danger')
             return redirect(url_for('dashboard'))
 
-        db.session.add(transaction)
+        if transaction:
+            db.session.add(transaction)
         db.session.commit()
         flash('Transacción realizada con éxito', 'success')
 
@@ -235,6 +252,7 @@ def transactions():
     rates = get_latest_dollar_rate()
     user_transactions = Transaction.query.filter_by(user_id=current_user.id).order_by(Transaction.timestamp.desc()).all()
     return render_template('transactions.html', transactions=user_transactions, buy_rate=rates['buy_rate'], sell_rate=rates['sell_rate'])
+
 
 @app.route('/transfer_history')
 @login_required
