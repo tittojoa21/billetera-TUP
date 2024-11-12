@@ -327,7 +327,12 @@
     <script>
         // Oculta automáticamente las alertas después de un tiempo
         document.querySelectorAll('.alert').forEach(alert => {
-            setTimeout(() => alert.classList.add('fade'), 3000);
+            setTimeout(() => {
+                alert.classList.add('fade');
+                setTimeout(() => {
+                    alert.remove();
+                }, 500); // Tiempo para que el alert se elimine después de desvanecerse
+            }, 3000);
         });
     </script>
 </body>

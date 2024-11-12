@@ -22,9 +22,14 @@ function autoHideAlerts(timeout) {
  */
 function fadeOut(element, duration = 500) {
     if (!element) return;
-    element.style.transition = `opacity ${duration}ms ease`;
+    element.style.transition = `opacity ${duration}ms ease, transform ${duration}ms ease`;
     element.style.opacity = '0';
-    setTimeout(() => element.remove(), duration);
+    element.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+        if (element && element.parentNode) {
+            element.parentNode.removeChild(element);
+        }
+    }, duration);
 }
 
 /**
@@ -42,8 +47,9 @@ function setupTransactionConfirmation() {
  */
 function handleTransactionSubmit(event) {
     event.preventDefault();
-    const amountInput = event.target.querySelector('input[name="amount"]');
-    const typeSelect = event.target.querySelector('select[name="type"]');
+    const form = event.target;
+    const amountInput = form.querySelector('input[name="amount"]');
+    const typeSelect = form.querySelector('select[name="type"]');
     const amount = parseFloat(amountInput?.value);
     const type = typeSelect?.value;
 
@@ -52,8 +58,19 @@ function handleTransactionSubmit(event) {
         return;
     }
 
-    if (confirm(`¿Estás seguro de que deseas ${type} $${amount.toFixed(2)}?`)) {
-        event.target.submit();
+    showConfirmation(`¿Estás seguro de que deseas ${type} $${amount.toFixed(2)}?`, () => {
+        form.submit();
+    });
+}
+
+/**
+ * Muestra una ventana de confirmación personalizada.
+ * @param {string} message - Mensaje de confirmación.
+ * @param {Function} onConfirm - Función a ejecutar si el usuario confirma.
+ */
+function showConfirmation(message, onConfirm) {
+    if (confirm(message)) {
+        onConfirm();
     }
 }
 
@@ -118,7 +135,7 @@ function showAlert(message, type = "danger", duration = 4000) {
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
 
-    // Añadir la alerta antes del contenido principal
+    // Añadir la alerta al contenedor principal si existe, o al body
     document.querySelector('main')?.prepend(alertBox) || document.body.prepend(alertBox);
 
     // Desvanece y elimina la alerta después del tiempo especificado
