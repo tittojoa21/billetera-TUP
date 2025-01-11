@@ -10,14 +10,13 @@ from sqlalchemy.exc import SQLAlchemyError
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Initialize extensions
+
 db.init_app(app)
 bcrypt.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 migrate = Migrate(app, db)
 
-# Load user for flask-login
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -101,15 +100,14 @@ def logout():
 def dashboard():
     rates = get_latest_dollar_rate()
     transactions = Transaction.query.filter_by(user_id=current_user.id).all()
-    
-    # Calcular totales por tipo de transacción
+
     total_deposits = sum(t.amount for t in transactions if t.type == 'deposit')
     total_withdrawals = sum(t.amount for t in transactions if t.type == 'withdraw')
     total_transfers = sum(t.amount for t in transactions if t.type == 'transfer')
     total_buy_dollars = sum(t.amount for t in transactions if t.type == 'buy_dollars')
     total_sell_dollars = sum(t.amount for t in transactions if t.type == 'sell_dollars')
     
-    # Pasar totales al template
+    
     return render_template(
         'dashboard.html',
         balance_pesos=current_user.balance_pesos,
@@ -150,7 +148,7 @@ def transaction():
     
     destination_username = request.form.get('destination')
     rates = get_latest_dollar_rate()
-    transaction = None  # Asegurar que `transaction` esté definida
+    transaction = None 
 
     if not rates['buy_rate'] or not rates['sell_rate']:
         flash('Las tasas de cambio no están disponibles actualmente.', 'danger')
@@ -180,11 +178,11 @@ def transaction():
                 flash('Fondos insuficientes para esta operación.', 'danger')
                 return redirect(url_for('dashboard'))
             
-            # Ajuste en el monto de transferencia
+            
             current_user.balance_pesos -= amount
             recipient.balance_pesos += amount
 
-            # Registro de transacciones para el remitente y el destinatario
+            
             transaction_sender = Transaction(user_id=current_user.id, amount=amount, type=type, destination=recipient.username)
             transaction_recipient = Transaction(user_id=recipient.id, sender_id=current_user.id, amount=amount, type=type)
             

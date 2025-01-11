@@ -3,19 +3,19 @@ from datetime import timedelta
 from typing import Type
 from flask import Flask
 
-# Define el directorio base para rutas relativas del proyecto
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     """Configuración base para la aplicación"""
-    SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))  # Clave de seguridad para sesiones
-    SQLALCHEMY_TRACK_MODIFICATIONS = False  # Deshabilita eventos de modificación para mejorar el rendimiento
-    SESSION_COOKIE_HTTPONLY = True  # Previene acceso de JavaScript a cookies
-    SESSION_COOKIE_SAMESITE = 'Lax'  # Restringe el uso de cookies en solicitudes de terceros
-    PERMANENT_SESSION_LIFETIME = timedelta(hours=1)  # Duración de la sesión
-    REMEMBER_COOKIE_DURATION = timedelta(hours=int(os.getenv('SESSION_DURATION', '1')))  # Duración de sesión persistente
+    SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SESSION_COOKIE_HTTPONLY = True 
+    SESSION_COOKIE_SAMESITE = 'Lax'  
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=1) 
+    REMEMBER_COOKIE_DURATION = timedelta(hours=int(os.getenv('SESSION_DURATION', '1')))  
 
-    # Configuración de base de datos (con SQLite como predeterminado)
+
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "database.db")}')
     
     @staticmethod
@@ -26,7 +26,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Configuración para el entorno de desarrollo"""
     DEBUG = True
-    SESSION_COOKIE_SECURE = False  # HTTPS no requerido en desarrollo
+    SESSION_COOKIE_SECURE = False  
     SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DATABASE_URI', f'sqlite:///{os.path.join(basedir, "dev_database.db")}')
     
     @staticmethod
@@ -42,7 +42,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Configuración para el entorno de producción"""
     DEBUG = False
-    SESSION_COOKIE_SECURE = True  # HTTPS requerido en producción
+    SESSION_COOKIE_SECURE = True  
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "prod_database.db")}')
     
     @staticmethod
@@ -67,7 +67,8 @@ class ProductionConfig(Config):
         app.logger.addHandler(stream_handler)
         app.logger.info("Logging de producción activado en archivo y consola.")
 
-# Diccionario para seleccionar la configuración según el entorno
+
+
 config_by_name = {
     'development': DevelopmentConfig,
     'production': ProductionConfig

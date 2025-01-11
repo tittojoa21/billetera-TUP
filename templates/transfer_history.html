@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
-        /* Fondo degradado animado */
+        
         body {
             background: linear-gradient(135deg, #1f3a93, #4ca1af);
             background-size: 300% 300%;
@@ -38,7 +38,7 @@
             }
         }
 
-        /* Contenedor principal */
+        
         .container {
             max-width: 1000px;
             padding: 30px;
@@ -68,7 +68,7 @@
             margin-bottom: 25px;
         }
 
-        /* Tabla de transacciones */
+        
         .table {
             color: #ecf0f1;
             border-radius: 15px;
@@ -112,7 +112,7 @@
             transform: scale(1.1);
         }
 
-        /* Celdas y estilos de tabla */
+        
         .table td,
         .table th {
             vertical-align: middle;
@@ -140,7 +140,7 @@
             font-style: italic;
         }
 
-        /* Responsividad */
+        
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -182,7 +182,7 @@
     <div class="container">
         <h1>Historial de Transferencias</h1>
 
-        <!-- Tabla de transferencias -->
+        
         {% if transfers %}
         <div class="table-responsive">
             <table class="table table-hover mt-4 align-middle">
@@ -222,7 +222,7 @@
         <p class="empty-state">No tienes transferencias recientes.</p>
         {% endif %}
 
-        <!-- Botón de regreso al dashboard -->
+        
         <div class="text-center">
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Volver al Dashboard</a>
         </div>

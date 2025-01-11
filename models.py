@@ -8,7 +8,7 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 
-# Constantes para los tipos de transacción
+
 TRANSACTION_DEPOSIT = 'deposit'
 TRANSACTION_WITHDRAW = 'withdraw'
 TRANSACTION_TRANSFER = 'transfer'
@@ -34,7 +34,7 @@ class User(UserMixin, db.Model):
     balance_dollars = db.Column(db.Float, default=0.0, nullable=False)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 
-    # Relaciones
+    
     cards = db.relationship('Card', backref='user', lazy=True, cascade="all, delete-orphan")
     transactions = db.relationship(
         'Transaction', 
@@ -104,12 +104,12 @@ class Transaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     amount = db.Column(db.Float, nullable=False)
-    type = db.Column(db.String(50), nullable=False)  # Tipos: deposit, withdraw, transfer, buy_dollars, sell_dollars, etc.
+    type = db.Column(db.String(50), nullable=False)  
     destination = db.Column(db.String(150), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     __table_args__ = (
-        CheckConstraint('amount > 0', name='amount_positive'),  # Verifica que el monto sea positivo
+        CheckConstraint('amount > 0', name='amount_positive'),
     )
 
     def __repr__(self):

@@ -30,19 +30,16 @@ def update_dollar_rate(
     success_message = "Cotización actualizada con éxito."
     error_message = "Error al actualizar la cotización."
 
-    # Validar que las tasas sean mayores a cero
     if any(rate is not None and rate <= 0 for rate in [buy_rate, sell_rate, blue_buy_rate, blue_sell_rate]):
         error_msg = "Todas las tasas deben ser mayores que cero."
         logger.error(error_msg)
         return error_msg
 
     try:
-        # Verificar si ya existe una tasa para el día de hoy
         today = date.today()
         existing_rate = DollarRate.query.filter(func.date(DollarRate.timestamp) == today).first()
 
         if existing_rate:
-            # Actualizar tasas existentes
             existing_rate.buy_rate = round(buy_rate, 4)
             existing_rate.sell_rate = round(sell_rate, 4)
             if blue_buy_rate is not None:
@@ -56,7 +53,6 @@ def update_dollar_rate(
                 buy_rate, sell_rate, blue_buy_rate or 0, blue_sell_rate or 0
             )
         else:
-            # Crear nueva entrada de tasas
             new_rate = DollarRate(
                 buy_rate=round(buy_rate, 4),
                 sell_rate=round(sell_rate, 4),
@@ -71,7 +67,7 @@ def update_dollar_rate(
                 buy_rate, sell_rate, blue_buy_rate or 0, blue_sell_rate or 0
             )
         
-        # Guardar los cambios
+
         db.session.commit()
         logger.info("Commit a la base de datos exitoso.")
         return success_message
@@ -85,5 +81,4 @@ def update_dollar_rate(
         return f"Error inesperado al actualizar la cotización: {str(e)}"
 
     finally:
-        # Finalizar sesión para evitar fugas de memoria
         db.session.remove()
